@@ -243,7 +243,10 @@ class AgentLoop:
                 break
         
         if final_content is None:
-            final_content = "I've completed processing but have no response to give."
+            if iteration >= self.max_iterations:
+                final_content = f"Reached {self.max_iterations} iterations without completion."
+            else:
+                final_content = "I've completed processing but have no response to give."
         
         # Log response preview
         preview = final_content[:120] + "..." if len(final_content) > 120 else final_content
@@ -350,7 +353,10 @@ class AgentLoop:
                 break
         
         if final_content is None:
-            final_content = "Background task completed."
+            if iteration >= self.max_iterations:
+                final_content = f"Reached {self.max_iterations} iterations without completion."
+            else:
+                final_content = "Background task completed."
         
         # Save to session (mark as system message in history)
         session.add_message("user", f"[System: {msg.sender_id}] {msg.content}")
